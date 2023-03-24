@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 100%;
 }
 
 .skip-buttons-container {
@@ -41,4 +41,33 @@
     color: white;
     opacity: 0.5;
     /* 50% de opacidad */
+}
+
+.video-bookmark-container {
+    position: relative;
+    display: flex;
+    width: 5px;
+}
+
+.video-bookmarks {
+    position: absolute;
+    display: flex;
+    top: 76%;
+    width: 5px;
+    height: 5px;
+    background-color: darkgoldenrod;
+    pointer-events: none;
+}
+
+.text-marker-container {
+    position: fixed;
+    background-color: black;
+    opacity: 0.5;
+    top: 0;
+}
+
+.text-marker {
+    color: white;
+    align-items: center;
+    justify-content: center;
 }
