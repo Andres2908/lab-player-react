@@ -23,6 +23,7 @@ function App() {
   const playerRef = useRef(null);
   const [hovering, setHovering] = useState(false);
   const [bookmarks, setBookmarks] = useState([]);
+  const [bookmarkComponent, setBookmarkComponent] = useState(null);
 
   const handleBookmarkClick = (bookmark) => {
     playerRef.current.seekTo(bookmark.time);
@@ -36,6 +37,31 @@ function App() {
     playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10);
   };
 
+  const handleProgress = () => {
+    const currentTime = playerRef.current.getCurrentTime();
+    if (bookmarks.length > 0) {
+      bookmarks.forEach((bookmark) => {
+        if (Math.floor(bookmark.time) === Math.floor(currentTime)) {
+          const component = handleMarkers(bookmark);
+          console.log(component);
+          setBookmarkComponent(component);
+        }
+        return null;
+      });
+    }
+  };
+
+  const handleMarkers = (bookmark = {}) => {
+    if (Object.keys(bookmark).length > 0) {
+      // console.log(bookmark.name);
+      return (
+        <div className="text-marker-container">
+          <p className="text-marker">{bookmark.name}</p>
+        </div>
+      );
+    } else return null;
+  };
+
   return (
     <>
       <div
@@ -47,6 +73,7 @@ function App() {
           ref={playerRef}
           url="http://vjs.zencdn.net/v/oceans.mp4"
           progressInterval={100}
+          onProgress={handleProgress}
           {...playerConfig}
         />
         {hovering && (
@@ -59,39 +86,10 @@ function App() {
             </button>
           </div>
         )}
+        {bookmarkComponent}
       </div>
 
-      {bookmarks &&
-        bookmarks.map((bookmark, index) => {
-          if (bookmark.time === playerRef.current.getCurrentTime()) {
-            return (
-              <div key={index} className="text-marker-container">
-                <p className="text-marker">{bookmark.name}</p>
-              </div>
-            );
-          }
-        })}
-
       <BookmarkButton player={playerRef} setBookmarks={setBookmarks} />
-
-      {bookmarks.map((bookmark, index) => (
-        <button
-          key={index}
-          onClick={() => {
-            if (bookmark.time === playerRef.current.getCurrentTime()) {
-              return (
-                <div className="text-marker-container">
-                  <p className="text-marker">{bookmark.name}</p>
-                </div>
-              );
-            }
-
-            handleBookmarkClick(bookmark);
-          }}
-        >
-          {bookmark.name}
-        </button>
-      ))}
     </>
   );
 }
