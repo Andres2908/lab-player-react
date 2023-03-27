@@ -4,7 +4,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
 }
 
 .skip-buttons-container {
@@ -68,6 +67,17 @@
 
 .text-marker {
     color: white;
+    margin: 1px;
     align-items: center;
     justify-content: center;
+}
+
+.timeline-marker {
+    position: absolute;
+    list-style-type: none;
+    /* top: 0; */
+    bottom: 42px;
+    width: 4px;
+    height: 4px;
+    background-color: yellow;
 }

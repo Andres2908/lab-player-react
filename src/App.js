@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { ForwardIcon, BackwardIcon } from "@heroicons/react/20/solid";
 import "./MyVideoPlayer.css";
@@ -16,8 +16,8 @@ function App() {
         },
       },
     },
-    width: "100%",
-    height: "100%",
+    width: "1050px",
+    height: "800px",
   };
 
   const playerRef = useRef(null);
@@ -43,7 +43,6 @@ function App() {
       bookmarks.forEach((bookmark) => {
         if (Math.floor(bookmark.time) === Math.floor(currentTime)) {
           const component = handleMarkers(bookmark);
-          console.log(component);
           setBookmarkComponent(component);
         }
         return null;
@@ -53,7 +52,6 @@ function App() {
 
   const handleMarkers = (bookmark = {}) => {
     if (Object.keys(bookmark).length > 0) {
-      // console.log(bookmark.name);
       return (
         <div className="text-marker-container">
           <p className="text-marker">{bookmark.name}</p>
@@ -62,9 +60,27 @@ function App() {
     } else return null;
   };
 
+  const renderMarkers = () => {
+    return bookmarks.map((bookmark) => (
+      <li
+        key={bookmark.id}
+        className="timeline-marker"
+        style={{
+          left: `${(bookmark.time / playerRef.current.getDuration()) * 100}%`,
+        }}
+      ></li>
+    ));
+  };
+
   return (
     <>
+      {console.log(playerRef.current?.props.width)}
+      {console.log(playerRef.current?.props.height)}
       <div
+        style={{
+          height: `${playerRef.current?.props.height}`,
+          width: `${playerRef.current?.props.width}`,
+        }}
         className="video-container"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
@@ -76,6 +92,11 @@ function App() {
           onProgress={handleProgress}
           {...playerConfig}
         />
+
+        <div className="timeline">
+          <ul className="timeline-markers">{renderMarkers()}</ul>
+        </div>
+
         {hovering && (
           <div className="skip-buttons-container">
             <button className="skip-button" onClick={handleBackward10}>
@@ -88,6 +109,26 @@ function App() {
         )}
         {bookmarkComponent}
       </div>
+      {bookmarks.map((bookmark, index) => (
+        <button
+          type="button"
+          class="btn btn-secondary"
+          key={index}
+          onClick={() => {
+            if (bookmark.time === playerRef.current.getCurrentTime()) {
+              return (
+                <div>
+                  <p>{bookmark.name}</p>
+                </div>
+              );
+            }
+
+            handleBookmarkClick(bookmark);
+          }}
+        >
+          {bookmark.name}
+        </button>
+      ))}
 
       <BookmarkButton player={playerRef} setBookmarks={setBookmarks} />
     </>

@@ -13,14 +13,15 @@ function BookmarkButton({ player, setBookmarks }) {
   };
 
   return (
-    <div>
+    <div class="input-group mb-3">
       <input
         type="text"
+        class="form-control"
         placeholder="Nota"
         value={bookmarkName}
         onChange={e => setBookmarkName(e.target.value)}
       />
-      <button onClick={handleAddBookmark}>Add Bookmark</button>
+      <button type="button" class="btn btn-dark" onClick={handleAddBookmark}>Add Bookmark</button>
     </div>
   );
 }
