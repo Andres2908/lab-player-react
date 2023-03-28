@@ -5,7 +5,27 @@ import "./MyVideoPlayer.css";
 
 import BookmarkButton from "./BookmarkButton";
 
-export default function Video() {
+export default function Video({ width }) {
+
+    const handleHeight = (width) => {
+        if (width >= 426 && width < 640) return "240px"
+        else if (width >= 640 && width < 854) return "360px"
+        else if (width >= 854 && width < 1280) return "480px"
+        else return "400px"
+    }
+
+    const handleBottomText = (width) => {
+        if (width >= 426 && width < 640) return `${(parseInt(playerRef.current?.props.height) / 4) - 15}px`
+        if (width >= 640 && width < 854) return `${(parseInt(playerRef.current?.props.height) / 4) - 25}px`
+        if (width >= 854 && width < 1280) return `${(parseInt(playerRef.current?.props.height) / 4) - 45}px`
+    }
+
+    const handleLeftMark = (bookmark) => {
+        return `${((bookmark.time / playerRef.current.getDuration()) * 100) + 2}px`
+        // if ((playerRef.current.getDuration() / 2) < playerRef.current.getCurrentTime()) return `${((bookmark.time / playerRef.current.getDuration()) * 100) + 2}px`
+        // else if ((playerRef.current.getDuration() / 2) < playerRef.current.getCurrentTime()) return `${((bookmark.time / playerRef.current.getDuration()) * 98) - 2}px`
+    }
+
     const playerConfig = {
         // playbackRate: 4.0, // establece la lista de velocidades de reproducción
         controls: true,
@@ -16,18 +36,14 @@ export default function Video() {
                 },
             },
         },
-        width: "600px",
-        height: "600px",
+        width: width + "px",
+        height: handleHeight(width),
     };
 
     const playerRef = useRef(null);
     const [hovering, setHovering] = useState(false);
     const [bookmarks, setBookmarks] = useState([]);
     const [bookmarkComponent, setBookmarkComponent] = useState(null);
-
-    const handleBookmarkClick = (bookmark) => {
-        playerRef.current.seekTo(bookmark.time);
-    };
 
     const handleForward10 = () => {
         playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
@@ -53,7 +69,7 @@ export default function Video() {
     const handleMarkers = (bookmark = {}) => {
         if (Object.keys(bookmark).length > 0) {
             return (
-                <div className="text-marker-container">
+                <div className="text-marker-container" style={{ bottom: `${handleBottomText(width)}` }}>
                     <p className="text-marker">{bookmark.name}</p>
                 </div>
             );
@@ -66,7 +82,7 @@ export default function Video() {
                 key={bookmark.id}
                 className="timeline-marker"
                 style={{
-                    left: `${((bookmark.time + .5) / (playerRef.current.getDuration())) * 100}%`,
+                    left: handleLeftMark(bookmark),
                 }}
             ></li>
         ));
@@ -74,8 +90,6 @@ export default function Video() {
 
     return (
         <>
-            {console.log(playerRef.current?.videoHeight)}
-            {bookmarks && console.log(bookmarks)}
             <div
                 className="video-container"
                 style={{
@@ -109,27 +123,6 @@ export default function Video() {
 
                 {bookmarkComponent}
             </div>
-
-            {/* {bookmarks.map((bookmark, index) => (
-                <button
-                    type="button"
-                    className="btn btn-secondary"
-                    key={index}
-                    onClick={() => {
-                        if (bookmark.time === playerRef.current.getCurrentTime()) {
-                            return (
-                                <div>
-                                    <p>{bookmark.name}</p>
-                                </div>
-                            );
-                        }
-
-                        handleBookmarkClick(bookmark);
-                    }}
-                >
-                    {bookmark.name}
-                </button>
-            ))} */}
 
             <BookmarkButton player={playerRef} setBookmarks={setBookmarks} width={playerRef.current?.props.width} />
         </>

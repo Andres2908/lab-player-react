@@ -2,7 +2,7 @@ import Video from "./components/Video";
 function App() {
   return (
     <div className="container">
-      <Video />
+      <Video width="900" />
     </div>
   );
 }
