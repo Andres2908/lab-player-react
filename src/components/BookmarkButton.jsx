@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function BookmarkButton({ player, setBookmarks }) {
+function BookmarkButton({ player, setBookmarks, width }) {
   const [bookmarkName, setBookmarkName] = useState('');
 
   const handleAddBookmark = () => {
@@ -13,16 +13,16 @@ function BookmarkButton({ player, setBookmarks }) {
   };
 
   return (
-    <div class="input-group mb-3">
+    <div className="input-group mb-3" style={{ width: `${width}` }}>
       <input
         type="text"
-        class="form-control"
+        className="form-control"
         placeholder="Nota"
         value={bookmarkName}
         onChange={e => setBookmarkName(e.target.value)}
       />
-      <button type="button" class="btn btn-dark" onClick={handleAddBookmark}>Add Bookmark</button>
-    </div>
+      <button type="button" className="btn btn-dark" onClick={handleAddBookmark}>Add Bookmark</button>
+    </div >
   );
 }
 

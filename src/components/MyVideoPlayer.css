@@ -42,27 +42,11 @@
     /* 50% de opacidad */
 }
 
-.video-bookmark-container {
-    position: relative;
-    display: flex;
-    width: 5px;
-}
-
-.video-bookmarks {
-    position: absolute;
-    display: flex;
-    top: 76%;
-    width: 5px;
-    height: 5px;
-    background-color: darkgoldenrod;
-    pointer-events: none;
-}
-
 .text-marker-container {
-    position: fixed;
+    position: absolute;
     background-color: black;
     opacity: 0.5;
-    top: 0;
+    top: 175px;
 }
 
 .text-marker {
@@ -76,8 +60,8 @@
     position: absolute;
     list-style-type: none;
     /* top: 0; */
-    bottom: 42px;
+    bottom: .95cm;
     width: 4px;
     height: 4px;
-    background-color: yellow;
+    background-color: #CACA00;
 }
