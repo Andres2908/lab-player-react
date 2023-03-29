@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import ReactPlayer from "react-player";
-import { ForwardIcon, BackwardIcon } from "@heroicons/react/20/solid";
+import { ForwardIcon, BackwardIcon, BookmarkIcon } from "@heroicons/react/20/solid";
 import "./MyVideoPlayer.css";
 
 import BookmarkButton from "./BookmarkButton";
@@ -44,6 +44,7 @@ export default function Video({ width }) {
     const [hovering, setHovering] = useState(false);
     const [bookmarks, setBookmarks] = useState([]);
     const [bookmarkComponent, setBookmarkComponent] = useState(null);
+    const [showMarkers, setShowMarkers] = useState(false)
 
     const handleForward10 = () => {
         playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
@@ -66,6 +67,10 @@ export default function Video({ width }) {
         }
     };
 
+    const handleShowMarkers = () => {
+        showMarkers ? setShowMarkers(false) : setShowMarkers(true)
+    }
+
     const handleMarkers = (bookmark = {}) => {
         if (Object.keys(bookmark).length > 0) {
             return (
@@ -82,7 +87,7 @@ export default function Video({ width }) {
                 key={bookmark.id}
                 className="timeline-marker"
                 style={{
-                    left: handleLeftMark(bookmark),
+                    left: `${((bookmark.time / playerRef.current.getDuration()) * 100) + 1}%`
                 }}
             ></li>
         ));
@@ -106,9 +111,18 @@ export default function Video({ width }) {
                     {...playerConfig}
                 />
 
-                <div className="timeline">
-                    <ul className="timeline-markers">{renderMarkers()}</ul>
-                </div>
+                {showMarkers && (
+                    <div className="timeline">
+                        <ul className="timeline-markers">{renderMarkers()}</ul>
+                    </div>
+                )
+                }
+
+                {hovering && (
+                    <div className="button-marker-container" style={{ bottom: `${showMarkers ? "48px" : "32px"}` }}>
+                        <button className="button-marker" onClick={handleShowMarkers}><BookmarkIcon className="color-icon-marker" /></button>
+                    </div>
+                )}
 
                 {hovering && (
                     <div className="skip-buttons-container">
@@ -119,12 +133,17 @@ export default function Video({ width }) {
                             <ForwardIcon className="colorIcon" />
                         </button>
                     </div>
+
                 )}
 
-                {bookmarkComponent}
             </div>
 
-            <BookmarkButton player={playerRef} setBookmarks={setBookmarks} width={playerRef.current?.props.width} />
+            {bookmarkComponent}
+
+            {showMarkers && (
+                <BookmarkButton player={playerRef} setBookmarks={setBookmarks} width={playerRef.current?.props.width} />
+            )
+            }
         </>
     )
 }
