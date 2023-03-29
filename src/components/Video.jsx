@@ -15,9 +15,9 @@ export default function Video({ width }) {
     }
 
     const handleBottomText = (width) => {
-        if (width >= 426 && width < 640) return `${(parseInt(playerRef.current?.props.height) / 4) - 15}px`
-        if (width >= 640 && width < 854) return `${(parseInt(playerRef.current?.props.height) / 4) - 25}px`
-        if (width >= 854 && width < 1280) return `${(parseInt(playerRef.current?.props.height) / 4) - 45}px`
+        if (width >= 426 && width < 640) return `${(parseInt(playerRef.current?.props.height) / 4) + 40}px`
+        if (width >= 640 && width < 854) return `${(parseInt(playerRef.current?.props.height) / 4) + 25}px`
+        if (width >= 854 && width < 1280) return `${(parseInt(playerRef.current?.props.height) / 4) + 5}px`
     }
 
     const handleLeftMark = (bookmark) => {
@@ -138,7 +138,7 @@ export default function Video({ width }) {
 
             </div>
 
-            {bookmarkComponent}
+            {showMarkers && bookmarkComponent}
 
             {showMarkers && (
                 <BookmarkButton player={playerRef} setBookmarks={setBookmarks} width={playerRef.current?.props.width} />
